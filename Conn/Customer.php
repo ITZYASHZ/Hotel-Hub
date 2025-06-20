@@ -30,36 +30,33 @@ class Customer{
         }
     }
 
-    public function GetCustLogin($username) {
-        try {
-            $query = "SELECT `NIC`, `Name`, `Email`, `Mobile`, `Password` 
-            FROM `customer` 
-            WHERE Email=:email LIMIT 1";
-    
-            $conn = Conn::GetConnection();
-            $st = $conn->prepare($query);
-            $st->bindValue(":email", $username, PDO::PARAM_STR);
-            $st->execute();
-    
-            $result = $st->fetch(PDO::FETCH_ASSOC);
-    
-            if ($result) {
-                $this->NIC = $result['NIC'];
-                $this->Name = $result['Name'];
-                $this->Email = $result['Email'];
-                $this->Mobile = $result['Mobile'];
-                $this->Password = $result['Password'];
-            } else {
-                $this->NIC = "";
-                $this->Name = "";
-                $this->Email = "";
-                $this->Mobile = "";
-                $this->Password = "";
-            }
-        } catch (Exception $th) {
-            throw $th;
+public function GetCustLogin($username) {
+    try {
+        $query = "SELECT `NIC`, `Name`, `Email`, `Mobile`, `Password` 
+                  FROM `customer` 
+                  WHERE Email = :email LIMIT 1";
+
+        $conn = Conn::GetConnection();
+        $st = $conn->prepare($query);
+        $st->bindValue(":email", $username, PDO::PARAM_STR);
+        $st->execute();
+
+        $result = $st->fetch(PDO::FETCH_ASSOC);
+
+        if ($result) {
+            $this->NIC = $result['NIC'];
+            $this->Name = $result['Name'];
+            $this->Email = $result['Email'];
+            $this->Mobile = $result['Mobile'];
+            $this->Password = $result['Password'];
+            return true;
+        } else {
+            return false;
         }
+    } catch (Exception $th) {
+        throw $th;
     }
+}
     
     
     public static function GetCusts()
